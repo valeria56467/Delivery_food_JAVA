@@ -25,6 +25,7 @@ const buttonOut = document.querySelector('.button-out');
 
 
 
+
 let login = localStorage.getItem('gloDelivery'); //создаем переменную для проверки авторизации по которой у нас будет идти проверка, придаем ей значение сохранения
 
 
@@ -65,13 +66,16 @@ function authorized() {
       closeAuth.removeEventListener('click', toggleModalAuth); // установка события - закрытия окна по знаку "Х"
       logInForm.removeEventListener('submit', logIn);
       logInForm.reset (); //очищаем окно ввода логина
-    checkAuth()
+    checkAuth();
+      if (login === "") {alert("Введите имя пользователя"); toggleModalAuth();}
+      else {}
 
   }
 
    buttonAuth.addEventListener('click', toggleModalAuth);
    closeAuth.addEventListener('click', toggleModalAuth); // установка события - закрытия окна по знаку "Х"
    logInForm.addEventListener('submit', logIn);
+
  }
 
  function checkAuth() {
