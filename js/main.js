@@ -8,3 +8,8 @@ close.addEventListener("click", toggleModal);
 function toggleModal() {
   modal.classList.toggle("is-open");
 }
+
+//day 1
+//реализация авторизации
+
+console.log(document)
