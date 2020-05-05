@@ -15,4 +15,5 @@ function toggleModal() {
 console.log(document.querySelector('.button-auth'))
 
 const buttouAuth = document.querySelector('.button-auth')
+const modalAuth = document.querySelector('.modal-auth')
 console.log(buttouAuth)
