@@ -38,16 +38,15 @@ function authorized() {
 }
  function notAuthorized() {
   console.log('Не авторизован');
-
   function logIn (event) {
     event.preventDefault() //не работает
     console.log('Логин');
-    console.log(loginInput.value)
+    console.log(loginInput.value);
   }
 
    buttouAuth.addEventListener('click', toggleModalAuth); //установка события по клику мышки - открытия окна
    closeAuth.addEventListener('click', toggleModalAuth); // установка события - закрытия окна по знаку "Х"
-   logInForm.addEventListener('submin', logIn)
+   logInForm.addEventListener('submin', logIn);
  }
 
 if (login) {
