@@ -63,6 +63,7 @@ function authorized() {
       toggleModalAuth();
       if (login === "") {
           alert("Введите имя пользователя");
+          toggleModalAuth();
       }
       else {
           localStorage.setItem('gloDelivery', login); //сохраняем имя пользователя, что бы не надо было вводить после перезагрузки страницы
