@@ -60,15 +60,16 @@ function authorized() {
   function logIn (event) {
     event.preventDefault();
     login = loginInput.value;
-    localStorage.setItem('gloDelivery', login) //сохраняем имя пользователя, что бы не надо было вводить после перезагрузки страницы
-    toggleModalAuth();
-    buttonAuth.removeEventListener('click', toggleModalAuth); //установка события по клику мышки - открытия окна
-      closeAuth.removeEventListener('click', toggleModalAuth); // установка события - закрытия окна по знаку "Х"
-      logInForm.removeEventListener('submit', logIn);
-      logInForm.reset (); //очищаем окно ввода логина
-    checkAuth();
       if (login === "") {alert("Введите имя пользователя"); toggleModalAuth();}
-      else {}
+      else {
+          localStorage.setItem('gloDelivery', login) //сохраняем имя пользователя, что бы не надо было вводить после перезагрузки страницы
+          toggleModalAuth();
+          buttonAuth.removeEventListener('click', toggleModalAuth); //установка события по клику мышки - открытия окна
+          closeAuth.removeEventListener('click', toggleModalAuth); // установка события - закрытия окна по знаку "Х"
+          logInForm.removeEventListener('submit', logIn);
+          logInForm.reset (); //очищаем окно ввода логина
+          checkAuth();
+      }
 
   }
 
