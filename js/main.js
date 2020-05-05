@@ -12,4 +12,7 @@ function toggleModal() {
 //day 1
 //реализация авторизации
 
-console.log(document)
+console.log(document.querySelector('.button-auth'))
+
+const buttouAuth = document.querySelector('.button-auth')
+console.log(buttouAuth)
