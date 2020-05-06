@@ -147,15 +147,19 @@ function openGoods(event) { //создаем функцию - обработчи
     const target = event.target; //сохраняем в переменную, что бы сократить запись, сам таргет нам нужен что бы определять в какой конкретно карточке мы кликнули
     const restaurant = target.closest('.card-restaurant') //метод поднимается выше  по элементам, пока не найдет  элемент с заданным селектором
     //console.log('restaurant: ', restaurant)
-    if (restaurant) { //когда проходит клик по карточке с рестораном мы
-        containerPromo.classList.add('hide');//скрываем отображение блока "Промо"
-        restaurants.classList.add('hide'); //скрываем отображение блока выбора ресторана
-        menu.classList.remove('hide'); //показываем блок с блюдами выбранного ресторана
-        cardsMenu.textContent = "";
-        createCardGood ();
-        createCardGood ();
-        createCardGood ();
+    if (login != null)
+         if (restaurant) { //когда проходит клик по карточке с рестораном мы
+            containerPromo.classList.add('hide');//скрываем отображение блока "Промо"
+            restaurants.classList.add('hide'); //скрываем отображение блока выбора ресторана
+            menu.classList.remove('hide'); //показываем блок с блюдами выбранного ресторана
+             cardsMenu.textContent = "";
+            createCardGood ();
+            createCardGood ();
+            createCardGood ();
     }
+            else {
+    }
+            else { toggleModalAuth();}
 
 }
 
