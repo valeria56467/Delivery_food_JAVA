@@ -22,8 +22,11 @@ const loginInput = document.querySelector('#login');
 const userName = document.querySelector('.user-name');
 const buttonOut = document.querySelector('.button-out');
 //day 2
-const cardsRestaurants = document.querySelector('.cards-restaurants'); //задаем переменну в виде карточек 
-
+const cardsRestaurants = document.querySelector('.cards-restaurants'); //задаем переменну в виде карточек
+const containerPromo = document.querySelector('.container-promo'); //используем для закрытия контенера "Promo"
+const restaurants = document.querySelector('.restaurants'); //для закрытия "restaurants"
+const menu = document.querySelector('.menu'); // для отображения "Меню"
+const logo = document.querySelector('.logo');
 
 
 
@@ -32,7 +35,7 @@ let login = localStorage.getItem('gloDelivery'); //создаем перемен
 
 function toggleModalAuth() { //функция вызова окна авторизации
     modalAuth.classList.toggle('is-open')
-    loginInput.style.borderColor = 'red'
+    loginInput.style.borderColor = ''
 }
 
 
@@ -93,6 +96,10 @@ function authorized() {
  }
 
  checkAuth();
+
+
+//day2
+
  function createCardRestaurant() { //создаем функицию генерирования карточки товара
      const card = `
         <a class="card card-restaurant">
@@ -120,3 +127,26 @@ createCardRestaurant();
 createCardRestaurant();
 createCardRestaurant();
 createCardRestaurant();
+//Объект event -  это объект события, который создается только во время событии
+function openGoods(event) { //создаем функцию - обработчик событий, которую будем запускать при клике по карточке cardsRestaurants.addEventListener('click')
+    const target = event.target; //сохраняем в переменную, что бы сократить запись, сам таргет нам нужен что бы определять в какой конкретно карточке мы кликнули
+    const restaurant = target.closest('.card-restaurant') //метод поднимается выше  по элементам, пока не найдет  элемент с заданным селектором
+    //console.log('restaurant: ', restaurant)
+    if (restaurant) { //когда проходит клик по карточке с рестораном мы
+        containerPromo.classList.add('hide');//скрываем отображение блока "Промо"
+        restaurants.classList.add('hide'); //скрываем отображение блока выбора ресторана
+        menu.classList.remove('hide'); //показываем блок с блюдами выбранного ресторана
+               }
+
+
+
+}
+cardsRestaurants.addEventListener('click', openGoods);
+
+logo.addEventListener('click', function () { //при клике на "лого возвращаем блок промо и рестораны
+    containerPromo.classList.remove('hide');//скрываем отображение блока "Промо"
+    restaurants.classList.remove('hide'); //скрываем отображение блока выбора ресторана
+    menu.classList.add('hide');
+
+
+})
