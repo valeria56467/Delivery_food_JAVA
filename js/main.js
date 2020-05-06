@@ -1,14 +1,8 @@
+'use strict';
+
 const cartButton = document.querySelector("#cart-button");
 const modal = document.querySelector(".modal");
 const close = document.querySelector(".close");
-
-cartButton.addEventListener("click", toggleModal);
-close.addEventListener("click", toggleModal);
-
-function toggleModal() {
-  modal.classList.toggle("is-open");
-}
-
 //day 1
 //реализация авторизации
 
@@ -27,18 +21,19 @@ const containerPromo = document.querySelector('.container-promo'); //испол�
 const restaurants = document.querySelector('.restaurants'); //для закрытия "restaurants"
 const menu = document.querySelector('.menu'); // для отображения "Меню"
 const logo = document.querySelector('.logo');
-
-
+const cardsMenu = document.querySelector('.cards-menu');
 
 let login = localStorage.getItem('gloDelivery'); //создаем переменную для проверки авторизации по которой у нас будет идти проверка, придаем ей значение сохранения
 
+
+function toggleModal() {
+  modal.classList.toggle("is-open");
+}
 
 function toggleModalAuth() { //функция вызова окна авторизации
     modalAuth.classList.toggle('is-open')
     loginInput.style.borderColor = ''
 }
-
-
 
 function authorized() {
     function logOut () { //эта функция обнуляет наш логин
@@ -95,9 +90,6 @@ function authorized() {
 
  }
 
- checkAuth();
-
-
 //day2
 
  function createCardRestaurant() { //создаем функицию генерирования карточки товара
@@ -123,15 +115,10 @@ function authorized() {
 
  }
 
-createCardRestaurant();
-createCardRestaurant();
-createCardRestaurant();
-createCardRestaurant();
-
 function createCardGood () {
     const card = document.createElement('div');
     card.className = 'card';
-    card.innerHTML = `
+    card.insertAdjacentHTML('beforeend',  `
 	<img src="img/pizza-plus/pizza-classic.jpg" alt="image" class="card-image"/>
 		<div class="card-text">
 			<div class="card-heading">
@@ -150,11 +137,10 @@ function createCardGood () {
 			<strong class="card-price-bold">510 ₽</strong>
 		    </div>
 		</div>
-    `;
-    console.log(card);
+    `);
+    cardsMenu.insertAdjacentElement("beforeend", card);
 
 }
-
 
 //Объект event -  это объект события, который создается только во время событии
 function openGoods(event) { //создаем функцию - обработчик событий, которую будем запускать при клике по карточке cardsRestaurants.addEventListener('click')
@@ -165,11 +151,19 @@ function openGoods(event) { //создаем функцию - обработчи
         containerPromo.classList.add('hide');//скрываем отображение блока "Промо"
         restaurants.classList.add('hide'); //скрываем отображение блока выбора ресторана
         menu.classList.remove('hide'); //показываем блок с блюдами выбранного ресторана
-               }
-    createCardGood ();
+        cardsMenu.textContent = "";
+        createCardGood ();
+        createCardGood ();
+        createCardGood ();
+    }
 
 }
 
+
+
+cartButton.addEventListener("click", toggleModal);
+
+close.addEventListener("click", toggleModal);
 
 cardsRestaurants.addEventListener('click', openGoods);
 
@@ -180,3 +174,12 @@ logo.addEventListener('click', function () { //при клике на "лого 
 
 
 })
+
+
+
+checkAuth();
+
+createCardRestaurant();
+createCardRestaurant();
+createCardRestaurant();
+createCardRestaurant();
