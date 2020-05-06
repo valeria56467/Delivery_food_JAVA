@@ -21,7 +21,8 @@ const logInForm = document.querySelector('#logInForm'); //получение э�
 const loginInput = document.querySelector('#login');
 const userName = document.querySelector('.user-name');
 const buttonOut = document.querySelector('.button-out');
-
+//day 2
+const cardsRestaurants = document.querySelector('.cards-restaurants'); //задаем переменну в виде карточек 
 
 
 
@@ -92,4 +93,30 @@ function authorized() {
  }
 
  checkAuth();
+ function createCardRestaurant() { //создаем функицию генерирования карточки товара
+     const card = `
+        <a class="card card-restaurant">
+                <img src="img/tanuki/preview.jpg" alt="image" class="card-image"/>
+                <div class="card-text">
+                    <div class="card-heading">
+                        <h3 class="card-title">Тануки</h3>
+                        <span class="card-tag tag">60 мин</span>
+                    </div>
+                <div class="card-info">
+                    <div class="rating">
+                        4.5
+                    </div>
+                     <div class="price">От 1 200 ₽</div>
+                     <div class="category">Суши, роллы</div>
+                </div>
+            </div>
+        </a>
+        `;
+     cardsRestaurants.insertAdjacentHTML('beforeend', card); //так как необходимо вставлять верстку на страницу - используем метод .insertAdjacentHTML, мы указываем куда вставит и что вствить -
 
+ }
+
+createCardRestaurant();
+createCardRestaurant();
+createCardRestaurant();
+createCardRestaurant();
