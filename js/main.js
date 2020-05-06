@@ -127,6 +127,35 @@ createCardRestaurant();
 createCardRestaurant();
 createCardRestaurant();
 createCardRestaurant();
+
+function createCardGood () {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+	<img src="img/pizza-plus/pizza-classic.jpg" alt="image" class="card-image"/>
+		<div class="card-text">
+			<div class="card-heading">
+				<h3 class="card-title card-title-reg">Пицца Классика</h3>
+			</div>
+			<div class="card-info">
+				<div class="ingredients">Соус томатный, сыр «Моцарелла», сыр «Пармезан», ветчина, салями,
+					грибы.
+				</div>
+			</div>
+			<div class="card-buttons">
+				<button class="button button-primary button-add-cart">
+					<span class="button-card-text">В корзину</span>
+					<span class="button-cart-svg"></span>
+				</button>
+			<strong class="card-price-bold">510 ₽</strong>
+		    </div>
+		</div>
+    `;
+    console.log(card);
+
+}
+
+
 //Объект event -  это объект события, который создается только во время событии
 function openGoods(event) { //создаем функцию - обработчик событий, которую будем запускать при клике по карточке cardsRestaurants.addEventListener('click')
     const target = event.target; //сохраняем в переменную, что бы сократить запись, сам таргет нам нужен что бы определять в какой конкретно карточке мы кликнули
@@ -137,10 +166,11 @@ function openGoods(event) { //создаем функцию - обработчи
         restaurants.classList.add('hide'); //скрываем отображение блока выбора ресторана
         menu.classList.remove('hide'); //показываем блок с блюдами выбранного ресторана
                }
-
-
+    createCardGood ();
 
 }
+
+
 cardsRestaurants.addEventListener('click', openGoods);
 
 logo.addEventListener('click', function () { //при клике на "лого возвращаем блок промо и рестораны
