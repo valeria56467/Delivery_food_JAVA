@@ -25,15 +25,27 @@ const cardsMenu = document.querySelector('.cards-menu');
 
 let login = localStorage.getItem('gloDelivery'); //создаем переменную для проверки авторизации по которой у нас будет идти проверка, придаем ей значение сохранения
 
+const getData = async function (url) {
+    const response = await fetch(url);
+    if (!response.ok) { // нам надо убедиться что ошибок нет при запросе данных
+        throw new Error(`Ошибка по адресу ${url}, 
+        статус ошибка ${response.status}!+`); // использованна интерполяция те при каком тексте вставляе javascript код (`   ${____}`)
+    }
+    return await response.json();
+    } /*объявляем функцию, которая будет работать с БД - делать запрос к серверу и получать данные, функция будет асинхронной,
+те внутри мы сможем управлять задержкой, в данному случае  выполнение след. строки не начнется, пока не выполнится текущая строка */
+
+
+console.log(getData('./db/partners.json'));
 
 function toggleModal() {
   modal.classList.toggle("is-open");
-}
+};
 
 function toggleModalAuth() { //функция вызова окна авторизации
     modalAuth.classList.toggle('is-open')
-    loginInput.style.borderColor = ''
-}
+    loginInput.style.borderColor = '';
+};
 
 function authorized() {
     function logOut () { //эта функция обнуляет наш логин
@@ -44,7 +56,7 @@ function authorized() {
         buttonOut.style.display = ""; //скрываем кнопку Выход
         buttonOut.removeEventListener('click', logOut)
         checkAuth();
-    }
+    };
 
   console.log('Авторизован');
   userName.textContent = login //свойство которое содержит текст данного элемента, мыы можем не только получать но и записывать
@@ -53,7 +65,7 @@ function authorized() {
     userName.style.display = "inline"; //показываем имя пользователя
     buttonOut.style.display = "block";//показываем кнопку "Выход"
     buttonOut.addEventListener('click', logOut) //на кнопку "Выход" добавляем событие
-}
+};
 
  function notAuthorized() {
   console.log('Не авторизован');
@@ -79,7 +91,7 @@ function authorized() {
    closeAuth.addEventListener('click', toggleModalAuth); // установка события - закрытия окна по знаку "Х"
    logInForm.addEventListener('submit', logIn);
 
- }
+ };
 
  function checkAuth() {
      if (login) {
@@ -88,45 +100,63 @@ function authorized() {
          notAuthorized();
      }
 
- }
+ };
 
 //day2
 
- function createCardRestaurant() { //создаем функицию генерирования карточки товара
+ function createCardRestaurant(restaurant) { //создаем функицию генерирования карточки товара
+     const {
+         image,
+         kitchen,
+         name,
+         price,
+         stars,
+         products,
+         time_of_delivery: timeOfDelivery //переименовываем переменную в массиве
+     } = restaurant;
+
      const card = `
-        <a class="card card-restaurant">
-                <img src="img/tanuki/preview.jpg" alt="image" class="card-image"/>
+        <a class="card card-restaurant" data-products="${products}">
+                <img src="${image}" alt="image" class="card-image"/>
                 <div class="card-text">
                     <div class="card-heading">
-                        <h3 class="card-title">Тануки</h3>
-                        <span class="card-tag tag">60 мин</span>
+                        <h3 class="card-title">${name}</h3>
+                        <span class="card-tag tag">${timeOfDelivery}</span>
                     </div>
                 <div class="card-info">
                     <div class="rating">
-                        4.5
+                        ${stars}
                     </div>
-                     <div class="price">От 1 200 ₽</div>
-                     <div class="category">Суши, роллы</div>
+                     <div class="price">От ${price}</div>
+                     <div class="category">${kitchen}</div>
                 </div>
             </div>
         </a>
         `;
      cardsRestaurants.insertAdjacentHTML('beforeend', card); //так как необходимо вставлять верстку на страницу - используем метод .insertAdjacentHTML, мы указываем куда вставит и что вствить -
 
- }
+ };
 
-function createCardGood () {
+function createCardGood (goods) {
+    console.log(goods)
+    const {
+            description,
+            id,
+            image,
+            name,
+            price,
+
+    } = goods
     const card = document.createElement('div');
     card.className = 'card';
     card.insertAdjacentHTML('beforeend',  `
-	<img src="img/pizza-plus/pizza-classic.jpg" alt="image" class="card-image"/>
+	<img src="${image}" alt="image" class="card-image"/>
 		<div class="card-text">
 			<div class="card-heading">
-				<h3 class="card-title card-title-reg">Пицца Классика</h3>
+				<h3 class="card-title card-title-reg">${name}</h3>
 			</div>
 			<div class="card-info">
-				<div class="ingredients">Соус томатный, сыр «Моцарелла», сыр «Пармезан», ветчина, салями,
-					грибы.
+				<div class="ingredients">${description}
 				</div>
 			</div>
 			<div class="card-buttons">
@@ -134,56 +164,49 @@ function createCardGood () {
 					<span class="button-card-text">В корзину</span>
 					<span class="button-cart-svg"></span>
 				</button>
-			<strong class="card-price-bold">510 ₽</strong>
+			<strong class="card-price-bold">${price} ₽</strong>
 		    </div>
 		</div>
     `);
     cardsMenu.insertAdjacentElement("beforeend", card);
 
-}
+};
 
 //Объект event -  это объект события, который создается только во время событии
 function openGoods(event) { //создаем функцию - обработчик событий, которую будем запускать при клике по карточке cardsRestaurants.addEventListener('click')
     const target = event.target; //сохраняем в переменную, что бы сократить запись, сам таргет нам нужен что бы определять в какой конкретно карточке мы кликнули
     const restaurant = target.closest('.card-restaurant') //метод поднимается выше  по элементам, пока не найдет  элемент с заданным селектором
     //console.log('restaurant: ', restaurant)
-    if (login != null)
-         if (restaurant) { //когда проходит клик по карточке с рестораном мы
-            containerPromo.classList.add('hide');//скрываем отображение блока "Промо"
-            restaurants.classList.add('hide'); //скрываем отображение блока выбора ресторана
-            menu.classList.remove('hide'); //показываем блок с блюдами выбранного ресторана
-             cardsMenu.textContent = "";
-            createCardGood ();
-            createCardGood ();
-            createCardGood ();
-    }
-            else {
-    }
-            else { toggleModalAuth();}
+    if (restaurant){  //когда проходит клик по карточке с рестораном мы
+            if (login != null){
+                console.log(restaurant.dataset.products);
+                cardsMenu.textContent = "";
+                containerPromo.classList.add('hide');//скрываем отображение блока "Промо"
+                restaurants.classList.add('hide'); //скрываем отображение блока выбора ресторана
+                menu.classList.remove('hide'); //показываем блок с блюдами выбранного ресторана
+                getData(`./db/${restaurant.dataset.products}`).then(function (data) {
+                    data.forEach(createCardGood);
+                    });
 
+            }
+            else { toggleModalAuth();}
+}
+};
+
+
+function init () { // создаем 1 функцию для инициализации
+    getData('./db/partners.json').then(function (data) {
+        data.forEach(createCardRestaurant)
+    });
+    cartButton.addEventListener("click", toggleModal);
+    close.addEventListener("click", toggleModal);
+    cardsRestaurants.addEventListener('click', openGoods);
+    logo.addEventListener('click', function () { //при клике на "лого возвращаем блок промо и рестораны
+        containerPromo.classList.remove('hide');//скрываем отображение блока "Промо"
+        restaurants.classList.remove('hide'); //скрываем отображение блока выбора ресторана
+        menu.classList.add('hide');
+    })
+    checkAuth();
 }
 
-
-
-cartButton.addEventListener("click", toggleModal);
-
-close.addEventListener("click", toggleModal);
-
-cardsRestaurants.addEventListener('click', openGoods);
-
-logo.addEventListener('click', function () { //при клике на "лого возвращаем блок промо и рестораны
-    containerPromo.classList.remove('hide');//скрываем отображение блока "Промо"
-    restaurants.classList.remove('hide'); //скрываем отображение блока выбора ресторана
-    menu.classList.add('hide');
-
-
-})
-
-
-
-checkAuth();
-
-createCardRestaurant();
-createCardRestaurant();
-createCardRestaurant();
-createCardRestaurant();
+init()
