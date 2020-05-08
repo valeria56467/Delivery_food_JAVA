@@ -236,9 +236,9 @@ function renderCart() { //добавлении функции для форми�
 					<span class="food-name">${title}</span>
 					<strong class="food-price">${cost}</strong>
 					<div class="food-counter">
-						<button class="counter-button">-</button>
+						<button class="counter-button counter-minus" data-id=${id}>-</button>
 						<span class="counter">${count}</span>
-						<button class="counter-button">+</button>
+						<button class="counter-button counter-plus" data-id=${id}>+</button>
 					</div>
 				</div>
         `;
@@ -250,6 +250,24 @@ function renderCart() { //добавлении функции для форми�
     modalPrice.textContent = totalPrice + '₽'; //в вите текстовых строк из этих строк нам надо выделить числа, поэтому в пред. строке используем функцию parseFloat
 };
 
+function changeCount(event) {
+    const target = event.target;
+    if (target.classList.contains('counter-minus')){
+        const food = cart.find(function (item) {
+            return item.id === target.dataset.id;
+        })
+        food.count--;
+        renderCart();
+    }
+    if (target.classList.contains('counter-plus')){
+        const food = cart.find(function (item) {
+            return item.id === target.dataset.id;
+        })
+        food.count++;
+        renderCart();
+    }
+}
+
 function init () { // создаем 1 функцию для инициализации
     getData('./db/partners.json').then(function (data) {
         data.forEach(createCardRestaurant)
@@ -257,8 +275,8 @@ function init () { // создаем 1 функцию для инициализ�
     cartButton.addEventListener("click", function () {
         renderCart();
         toggleModal();
-
     });
+    modalBody.addEventListener('click', changeCount)
     cardsMenu.addEventListener('click', addToCart) //к события на "меню", по которому мы будем запускать функцию "Добавить в корзину"
     close.addEventListener("click", toggleModal);
     cardsRestaurants.addEventListener('click', openGoods);
