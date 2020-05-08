@@ -28,6 +28,11 @@ const buttonClearCart = document.querySelector('.clear-cart');
 
 let login = localStorage.getItem('gloDelivery'); //создаем переменную для проверки авторизации по которой у нас будет идти проверка, придаем ей значение сохранения
 
+const valid = function (str) {
+    const nameReg = /^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/;
+    return nameReg.test(str);
+}
+
 const cart = []; //создаем массив для корзины
 
 
@@ -79,7 +84,7 @@ function notAuthorized() {
   //console.log('Не авторизован');
   function logIn (event) {
     event.preventDefault();
-    if (loginInput.value.length) {
+    if (valid(loginInput.value)) {
         login = loginInput.value;
         localStorage.setItem('gloDelivery', login); //сохраняем имя пользователя, что бы не надо было вводить после перезагрузки страницы
         toggleModalAuth();
@@ -89,10 +94,10 @@ function notAuthorized() {
         logInForm.reset (); //очищаем окно ввода логина
         checkAuth();
     }
-     else {loginInput.style.borderColor = 'red'
-
+     else {
+         loginInput.style.borderColor = 'red'
+         loginInput.value = "";
       }
-
   }
 
    buttonAuth.addEventListener('click', toggleModalAuth);
