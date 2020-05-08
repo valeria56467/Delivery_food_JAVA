@@ -75,7 +75,7 @@ function authorized() {
     buttonOut.addEventListener('click', logOut) //на кнопку "Выход" добавляем событие
 };
 
- function notAuthorized() {
+function notAuthorized() {
   //console.log('Не авторизован');
   function logIn (event) {
     event.preventDefault();
@@ -101,7 +101,7 @@ function authorized() {
 
  };
 
- function checkAuth() {
+function checkAuth() {
      if (login) {
          authorized();
      } else {
@@ -112,7 +112,7 @@ function authorized() {
 
 //day2
 
- function createCardRestaurant(restaurant) { //создаем функицию генерирования карточки товара
+function createCardRestaurant(restaurant) { //создаем функицию генерирования карточки товара
      const {
          image,
          kitchen,
@@ -201,6 +201,7 @@ function openGoods(event) { //создаем функцию - обработчи
             else { toggleModalAuth();}
 }
 };
+
 function addToCart(event) {
     const target = event.target;
     //console.log(target);
@@ -228,7 +229,8 @@ function addToCart(event) {
        }
       // console.log(cart);
     }
-}
+};
+
 function renderCart() { //добавлении функции для формирования списка
     modalBody.textContent = ''; //во избежание дублирования очищаем корзину
     cart.forEach(function ({ id, title, cost, count }) {
@@ -270,7 +272,7 @@ function changeCount(event) { //функция изменения колличе
             };
         renderCart();
         }
-}
+};
 
 function init () { // создаем 1 функцию для инициализации
     getData('./db/partners.json').then(function (data) {
@@ -295,9 +297,15 @@ function init () { // создаем 1 функцию для инициализ�
         menu.classList.add('hide');
     })
     checkAuth();
-}
+};
+
 new Swiper('.swiper-container', { //добавление свапера, см. https://swiperjs.com/get-started/
     loop: true,
-    autoplay: true,
-})
+    autoplay: {
+        delay: 3000,
+    },
+    sliderPerView: 1,
+    sliderPerColumn: 1,
+});
+
 init();
