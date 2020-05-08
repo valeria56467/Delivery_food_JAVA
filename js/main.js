@@ -250,22 +250,25 @@ function renderCart() { //добавлении функции для форми�
     modalPrice.textContent = totalPrice + '₽'; //в вите текстовых строк из этих строк нам надо выделить числа, поэтому в пред. строке используем функцию parseFloat
 };
 
-function changeCount(event) {
+function changeCount(event) { //функция изменения колличества товара в корзине
     const target = event.target;
-    if (target.classList.contains('counter-minus')){
-        const food = cart.find(function (item) {
+    if (target.classList.contains('counter-button')) {
+        const food = cart.find(function (item){
             return item.id === target.dataset.id;
-        })
-        food.count--;
+        });
+
+        if (target.classList.contains('counter-minus')) {
+                food.count--; // уменьшеем на 1
+            if (food.count === 0) { //но если количество элементов равно 0, то удаляем наш элемент с карточки
+                cart.splice(cart.indexOf(food), 1)
+            }
+
+            };
+        if (target.classList.contains('counter-plus')) {
+                food.count++; //увеличиваем количество на 1
+            };
         renderCart();
-    }
-    if (target.classList.contains('counter-plus')){
-        const food = cart.find(function (item) {
-            return item.id === target.dataset.id;
-        })
-        food.count++;
-        renderCart();
-    }
+        }
 }
 
 function init () { // создаем 1 функцию для инициализации
