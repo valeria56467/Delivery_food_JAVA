@@ -25,6 +25,9 @@ const cardsMenu = document.querySelector('.cards-menu');
 
 let login = localStorage.getItem('gloDelivery'); //создаем переменную для проверки авторизации по которой у нас будет идти проверка, придаем ей значение сохранения
 
+const cart = []; //создаем массив для корзины
+
+
 const getData = async function (url) {
     const response = await fetch(url);
     if (!response.ok) { // нам надо убедиться что ошибок нет при запросе данных
@@ -36,7 +39,7 @@ const getData = async function (url) {
 те внутри мы сможем управлять задержкой, в данному случае  выполнение след. строки не начнется, пока не выполнится текущая строка */
 
 
-console.log(getData('./db/partners.json'));
+//console.log(getData('./db/partners.json'));
 
 function toggleModal() {
   modal.classList.toggle("is-open");
@@ -54,21 +57,23 @@ function authorized() {
         buttonAuth.style.display = ''; //отображаем кнопку "Войти"
         userName.style.display = ""; //скрываем имя пользователя
         buttonOut.style.display = ""; //скрываем кнопку Выход
-        buttonOut.removeEventListener('click', logOut)
+        cartButton.style.display = '';
+        buttonOut.removeEventListener('click', logOut);
         checkAuth();
     };
 
-  console.log('Авторизован');
+  //console.log('Авторизован');
   userName.textContent = login //свойство которое содержит текст данного элемента, мыы можем не только получать но и записывать
  // мы можем менять стили css, у примеру -  buttonAuth.style.backgroundColor = 'red'  это изменение фона кнопки "Войти"
     buttonAuth.style.display = 'none'; //скрываем отображение кнопки "Войти", когда вход уже осуществлен
     userName.style.display = "inline"; //показываем имя пользователя
-    buttonOut.style.display = "block";//показываем кнопку "Выход"
+    buttonOut.style.display = "flex";//показываем кнопку "Выход"
+    cartButton.style.display = 'flex';
     buttonOut.addEventListener('click', logOut) //на кнопку "Выход" добавляем событие
 };
 
  function notAuthorized() {
-  console.log('Не авторизован');
+  //console.log('Не авторизован');
   function logIn (event) {
     event.preventDefault();
     if (loginInput.value.length) {
@@ -138,7 +143,7 @@ function authorized() {
  };
 
 function createCardGood (goods) {
-    console.log(goods)
+   //console.log(goods)
     const {
             description,
             id,
@@ -149,6 +154,7 @@ function createCardGood (goods) {
     } = goods
     const card = document.createElement('div');
     card.className = 'card';
+    //card.id=id;
     card.insertAdjacentHTML('beforeend',  `
 	<img src="${image}" alt="image" class="card-image"/>
 		<div class="card-text">
@@ -160,11 +166,11 @@ function createCardGood (goods) {
 				</div>
 			</div>
 			<div class="card-buttons">
-				<button class="button button-primary button-add-cart">
+				<button class="button button-primary button-add-cart" id="${id}"> <!--так же мы присвоили каждой карточке индетификацонный номер из базы-->
 					<span class="button-card-text">В корзину</span>
 					<span class="button-cart-svg"></span>
 				</button>
-			<strong class="card-price-bold">${price} ₽</strong>
+			<strong class="card-price card-price-bold">${price} ₽</strong>
 		    </div>
 		</div>
     `);
@@ -179,7 +185,7 @@ function openGoods(event) { //создаем функцию - обработчи
     //console.log('restaurant: ', restaurant)
     if (restaurant){  //когда проходит клик по карточке с рестораном мы
             if (login != null){
-                console.log(restaurant.dataset.products);
+                //console.log(restaurant.dataset.products);
                 cardsMenu.textContent = "";
                 containerPromo.classList.add('hide');//скрываем отображение блока "Промо"
                 restaurants.classList.add('hide'); //скрываем отображение блока выбора ресторана
@@ -192,13 +198,41 @@ function openGoods(event) { //создаем функцию - обработчи
             else { toggleModalAuth();}
 }
 };
+function addToCart(event) {
+    const target = event.target;
+    //console.log(target);
+    const buttonAddToCart = target.closest('.button-add-cart'); //создаем кончтанту, содержащюю эту кнопку в HTML
+    /*надо ввести проверку, событие произошло имеено по той "кнопке" по которой мы хотели*/
+    if (buttonAddToCart) { //если клин не возвращает "null" тогда
+        const card = target.closest('.card');
+        const title = card.querySelector('.card-title-reg').textContent; //подымаемся выше по карточке и получаем название и цену товара aeyrwbz .textContent выводит только текст
+        const cost= card.querySelector('.card-price').textContent; //получаем название товара;
+        const id =buttonAddToCart.id;
+        //console.log(title, cost, id);
+       const food = cart.find(function (item) {
+           return item.it === id;
+       })
 
+       if (food) {
+           food.count +=1;
+       } else {
+           cart.push({ //добавляем в константу cart, заданную в начале элементы, полученные в функции
+               id,
+               title,
+               cost,
+               count: 1
+           });
+       }
+      // console.log(cart);
+    }
+}
 
 function init () { // создаем 1 функцию для инициализации
     getData('./db/partners.json').then(function (data) {
         data.forEach(createCardRestaurant)
     });
     cartButton.addEventListener("click", toggleModal);
+    cardsMenu.addEventListener('click', addToCart) //к события на "меню", по которому мы будем запускать функцию "Добавить в корзину"
     close.addEventListener("click", toggleModal);
     cardsRestaurants.addEventListener('click', openGoods);
     logo.addEventListener('click', function () { //при клике на "лого возвращаем блок промо и рестораны
@@ -209,4 +243,4 @@ function init () { // создаем 1 функцию для инициализ�
     checkAuth();
 }
 
-init()
+init();
