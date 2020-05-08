@@ -296,5 +296,8 @@ function init () { // создаем 1 функцию для инициализ�
     })
     checkAuth();
 }
-
+new Swiper('.swiper-container', { //добавление свапера, см. https://swiperjs.com/get-started/
+    loop: true,
+    autoplay: true,
+})
 init();
