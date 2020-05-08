@@ -22,6 +22,8 @@ const restaurants = document.querySelector('.restaurants'); //для закры�
 const menu = document.querySelector('.menu'); // для отображения "Меню"
 const logo = document.querySelector('.logo');
 const cardsMenu = document.querySelector('.cards-menu');
+const modalBody = document.querySelector('.modal-body'); //получаем окно корзины
+const modalPrice = document.querySelector('.modal-pricetag');
 
 let login = localStorage.getItem('gloDelivery'); //создаем переменную для проверки авторизации по которой у нас будет идти проверка, придаем ей значение сохранения
 
@@ -210,28 +212,53 @@ function addToCart(event) {
         const id =buttonAddToCart.id;
         //console.log(title, cost, id);
        const food = cart.find(function (item) {
-           return item.it === id;
+           return item.id === id;
        })
 
        if (food) {
-           food.count +=1;
+           food.count += 1;
        } else {
            cart.push({ //добавляем в константу cart, заданную в начале элементы, полученные в функции
-               id,
-               title,
-               cost,
+               id: id,
+               title: title,
+               cost: cost,
                count: 1
            });
        }
       // console.log(cart);
     }
 }
+function renderCart() { //добавлении функции для формирования списка
+    modalBody.textContent = ''; //во избежание дублирования очищаем корзину
+    cart.forEach(function ({ id, title, cost, count }) {
+        const itemCart = `
+        		<div class="food-row">
+					<span class="food-name">${title}</span>
+					<strong class="food-price">${cost}</strong>
+					<div class="food-counter">
+						<button class="counter-button">-</button>
+						<span class="counter">${count}</span>
+						<button class="counter-button">+</button>
+					</div>
+				</div>
+        `;
+        modalBody.insertAdjacentHTML('afterbegin', itemCart)
+    });
+    const totalPrice = cart.reduce(function (result, item) {
+        return result + (parseFloat(item.cost)*item.count);
+    }, 0);
+    modalPrice.textContent = totalPrice + '₽'; //в вите текстовых строк из этих строк нам надо выделить числа, поэтому в пред. строке используем функцию parseFloat
+};
 
 function init () { // создаем 1 функцию для инициализации
     getData('./db/partners.json').then(function (data) {
         data.forEach(createCardRestaurant)
     });
-    cartButton.addEventListener("click", toggleModal);
+    cartButton.addEventListener("click", function () {
+        renderCart();
+        toggleModal();
+
+    });
     cardsMenu.addEventListener('click', addToCart) //к события на "меню", по которому мы будем запускать функцию "Добавить в корзину"
     close.addEventListener("click", toggleModal);
     cardsRestaurants.addEventListener('click', openGoods);
