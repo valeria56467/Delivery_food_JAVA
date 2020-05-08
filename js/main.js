@@ -24,6 +24,7 @@ const logo = document.querySelector('.logo');
 const cardsMenu = document.querySelector('.cards-menu');
 const modalBody = document.querySelector('.modal-body'); //получаем окно корзины
 const modalPrice = document.querySelector('.modal-pricetag');
+const buttonClearCart = document.querySelector('.clear-cart');
 
 let login = localStorage.getItem('gloDelivery'); //создаем переменную для проверки авторизации по которой у нас будет идти проверка, придаем ей значение сохранения
 
@@ -279,6 +280,11 @@ function init () { // создаем 1 функцию для инициализ�
         renderCart();
         toggleModal();
     });
+    buttonClearCart.addEventListener('click', function () { //добавление функционала на кнопку корзины "Отмена"
+        cart.length = 0;
+        renderCart()
+    });
+
     modalBody.addEventListener('click', changeCount)
     cardsMenu.addEventListener('click', addToCart) //к события на "меню", по которому мы будем запускать функцию "Добавить в корзину"
     close.addEventListener("click", toggleModal);
